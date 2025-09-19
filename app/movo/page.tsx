@@ -1,12 +1,12 @@
 "use client";
-import { Bot, InfoIcon } from "lucide-react";
+import { Bot } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { SkeletonCard } from "@/components/SkeletonCard";
 import { getMood } from "../actions/getMood";
 import { useRouter } from "next/navigation";
-import { sendMovies } from "../actions/sendGenre";
+
 
 export default function Page() {
   const [Mood, setMood] = useState("");

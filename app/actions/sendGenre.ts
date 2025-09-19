@@ -29,6 +29,6 @@ export async function sendMovies(genres:string[]){
         return response.data.results
 
     }catch(err){
-
+        console.log(err)
     }
 }
