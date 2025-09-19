@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { sendMovies } from "@/app/actions/sendGenre";
 import { useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/card";
@@ -49,6 +49,7 @@ export default function MovieCarousel() {
   }, [data]);
 
   return (
+    <Suspense>
     <div className="w-full max-w-2xl mx-auto px-4">
       <Carousel className="w-full">
         <CarouselContent>
@@ -92,6 +93,6 @@ export default function MovieCarousel() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-    </div>
+    </div></Suspense>
   );
 }
