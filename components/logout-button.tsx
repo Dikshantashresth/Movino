@@ -3,8 +3,12 @@
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { LogOut } from "lucide-react";
 
-export function LogoutButton() {
+interface collapseprop{
+  collapse:boolean
+}
+export function LogoutButton({collapse}:collapseprop) {
   const router = useRouter();
 
   const logout = async () => {
@@ -13,5 +17,5 @@ export function LogoutButton() {
     router.push("/auth/login");
   };
 
-  return <Button onClick={logout}>Logout</Button>;
+  return <Button onClick={logout} className="transition-all duration-1000" > <LogOut/> {!collapse&&"Logout"}</Button>;
 }
