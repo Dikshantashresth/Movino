@@ -1,6 +1,17 @@
-// app/details/page.tsx
-import DetailsContent from "./DetailContent";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import { SkeletonCard } from "@/components/SkeletonCard";
+
+// Dynamically import the client component (no SSR)
+const DetailsContent = dynamic(
+  () => import("./DetailContent"),
+  { ssr: false } // <-- important: disables server rendering
+);
 
 export default function DetailsPage() {
-  return <DetailsContent />;
+  return (
+    <Suspense fallback={<SkeletonCard />}>
+      <DetailsContent />
+    </Suspense>
+  );
 }
