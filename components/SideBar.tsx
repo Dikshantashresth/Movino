@@ -1,11 +1,12 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Home, Search, Settings, Flame, BotIcon, Lock, Menu } from "lucide-react";
+import { Home, Search, Settings, Flame, BotIcon, Lock, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { LogoutButton } from "./logout-button";
 import { createClient } from "@/lib/supabase/client"; 
 import { useIsMobile } from "@/hooks/use-mobile";
+import type { User } from "@supabase/supabase-js";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -27,7 +28,7 @@ export const Sidebar: React.FC<{
   setCollapsed: (value: boolean) => void;
 }> = ({ collapsed, setCollapsed }) => {
   const supabase = useMemo(() => createClient(), []);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const  isMobile  = useIsMobile();
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -74,7 +75,7 @@ export const Sidebar: React.FC<{
   ];
 
   // Sidebar classes
-  const baseSidebarClasses = `h-screen shadow-md p-3 fixed flex flex-col transition-all duration-300 border border-r `;
+  const baseSidebarClasses = `h-screen shadow-md p-3 fixed top-0 left-0 flex flex-col transition-all duration-300 border border-r `;
   const desktopWidth = collapsed ? "w-20" : "w-64";
 
   return (
@@ -82,7 +83,7 @@ export const Sidebar: React.FC<{
       {/* Mobile toggle button */}
       {isMobile && (
         <button
-          className={`fixed top-4 left-5  bg-blue-600 p-2 rounded text-white ${mobileOpen?"ml-20":"ml-0"}`}
+          className={`fixed top-4 left-5  bg-blue-600 p-2 rounded text-white `}
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           <Menu />
@@ -91,7 +92,7 @@ export const Sidebar: React.FC<{
 
       {/* Sidebar */}
       <div
-        className={`${baseSidebarClasses} ${isMobile ? "fixed top-0 left-0 z-40 h-full w-64 transform transition-transform duration-300" : desktopWidth} ${
+        className={`${baseSidebarClasses} ${isMobile ? " bg-black z-40 h-full w-64 transform transition-transform duration-300 " : desktopWidth} ${
           isMobile
             ? mobileOpen
               ? "translate-x-0"
@@ -104,14 +105,15 @@ export const Sidebar: React.FC<{
           <h1 className={`font-extrabold text-2xl ${collapsed && !isMobile ? "hidden" : ""}`}>
             Movino
           </h1>
-          {!isMobile && (
+          {!isMobile ? (
             <button
               onClick={() => setCollapsed(!collapsed)}
               className="mb-6 self-end px-2 py-1 rounded transition bg-blue-600"
             >
               {collapsed ? "→" : "←"}
             </button>
-          )}
+          ):(<button onClick={()=>setMobileOpen(false)}><X/></button>)}
+          
         </div>
 
         {/* Menu items */}
@@ -120,7 +122,7 @@ export const Sidebar: React.FC<{
             <SidebarItem
               key={item.label}
               icon={item.icon}
-              label={!collapsed ? item.label : ""}
+              label={(!collapsed || (isMobile && mobileOpen)) ? item.label : ""}
               url={item.url}
             />
           ))}

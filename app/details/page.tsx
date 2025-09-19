@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-interface Genre {
+export interface Genre {
   name: string;
   id: number;
 }
@@ -21,12 +21,21 @@ interface CastMember {
   id: number;
   profile_path?: string;
 }
+export interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  release_date: string;
+  vote_average: number;
+  overview: string;
+  genres?: Genre[];
+}
 
 export default function DetailsPage() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const isMobile = useIsMobile();
-  const [movie, setMovie] = useState<any>(null);
+  const [movie, setMovie] = useState<Movie>();
   const [cast, setCast] = useState<CastMember[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -116,7 +125,7 @@ export default function DetailsPage() {
 
         {/* Genres */}
         <div className="flex flex-wrap gap-2">
-          {movie?.genres.map((g: Genre) => (
+          {movie?.genres?.map((g: Genre) => (
             <Badge key={g.id} variant="outline" className="cursor-pointer">
               {g.name}
             </Badge>

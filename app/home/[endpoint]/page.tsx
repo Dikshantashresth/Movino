@@ -4,9 +4,29 @@ import { getMovies } from "@/app/actions/getMovies";
 import MovieCard from "@/components/MovieCard";
 import { useParams } from "next/navigation";
 import { SkeletonCard } from "@/components/SkeletonCard";
+export interface Genre {
+  name: string;
+  id: number;
+}
+
+interface CastMember {
+  character: string;
+  name: string;
+  id: number;
+  profile_path?: string;
+}
+export interface Movie {
+  id: number;
+  title: string;
+  poster_path?: string;
+  release_date: string;
+  vote_average: number;
+  overview: string;
+  genres?: Genre[];
+}
 
 const Show = () => {
-  const [movies, setMovies] = useState<any[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
   const [title, setTitle] = useState<string>("");
   const [loading, setloading] = useState(false);
   const params = useParams();
