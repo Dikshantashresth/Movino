@@ -42,7 +42,7 @@ Rules:
 6. Examples:
    - Input: "I am happy today"
      Output: ["Comedy","Romance","Family"]
-   - Input: "I feel scared and anxious"
+   - Input: "I feel scared and anxious"s
      Output: ["Horror","Thriller","Mystery"]
    - Input: "I want something inspiring and motivating"
      Output: ["Drama","Documentary"]
@@ -80,7 +80,13 @@ END`;
     );
 
     return response.data.choices[0].message.content;
-  } catch (err: any) {
+  } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
     console.error("Error:", err.response?.data || err.message);
+  } else if (err instanceof Error) {
+    console.error("Error:", err.message);
+  } else {
+    console.error("Unexpected error:", err);
+  }
   }
 }

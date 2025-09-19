@@ -9,12 +9,7 @@ export interface Genre {
   id: number;
 }
 
-interface CastMember {
-  character: string;
-  name: string;
-  id: number;
-  profile_path?: string;
-}
+
 export interface Movie {
   id: number;
   title: string;
