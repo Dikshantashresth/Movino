@@ -58,7 +58,10 @@ Special mapping note:
   ["Mystery","Science Fiction","Thriller","Drama"]
   (Use up to 4 of these depending on strength of the wording.)
 
-END`;
+END 
+IMPORTANT: **RETURN ONLY** a JSON array (e.g. ["Comedy","Romance"]). No explanation, no <think> blocks, no surrounding text. Use at most 4 genres. Use only genres from TMDB_GENRES.
+END
+`;
   const userQuery = `The User Input: ${query}`;
   console.log(userQuery);
      try {
@@ -80,6 +83,7 @@ END`;
     );
 
     return response.data.choices[0].message.content;
+  
   } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
     console.error("Error:", err.response?.data || err.message);

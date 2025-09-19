@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Sidebar } from "./SideBar";
 import { useIsMobile } from "@/hooks/use-mobile";
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
-   
-const isMobile = useIsMobile();
+
+  const isMobile = useIsMobile();
   useEffect(() => {
-   
     if (isMobile) {
       setCollapsed(true);
-    }else{
-      setCollapsed(false)
+    } else {
+      setCollapsed(false);
     }
   }, [isMobile]);
 
@@ -27,7 +26,7 @@ const isMobile = useIsMobile();
           !collapsed ? "ml-64" : "ml-20"
         }`}
       >
-        {children}
+        <Suspense>{children}</Suspense>
       </main>
     </div>
   );
