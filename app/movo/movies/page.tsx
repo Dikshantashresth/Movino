@@ -46,7 +46,7 @@ export default function MovieCarousel() {
       }
     };
     fetchMovies();
-  }, [data,genresArray]);
+  }, [data]);
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
