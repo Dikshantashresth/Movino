@@ -6,10 +6,18 @@ import React, { useState } from "react";
 import { getSearchedMovie } from "../actions/getSearchMovie";
 import MovieCard from "@/components/MovieCard";
 import Backbutton from "@/components/Backbutton";
-
+interface Movie{
+  
+    id: number;
+    title: string;
+    poster_path?: string;
+    release_date?: string;
+    vote_average?: number;
+  
+}
 const Page = () => {
   const [query, setQuery] = useState<string>('');
-  const [searchedMovie, setSearchedMovie] = useState<any[] | null>(null);
+  const [searchedMovie, setSearchedMovie] = useState<Movie[] | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // prevent page refresh

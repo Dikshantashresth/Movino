@@ -43,7 +43,7 @@ export function LoginForm({
           .select("*")
           .eq("id", data.user?.id)
           .single();
-
+        if(!profile){return}
         if (profileError && profileError.code === "PGRST116") {
           // No row found → insert new profile
           await supabase.from("profiles").insert({
