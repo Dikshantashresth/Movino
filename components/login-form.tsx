@@ -33,13 +33,34 @@ export function LoginForm({
     setError(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
+      if (data) {
+        const { data: profile, error: profileError } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", data.user?.id)
+          .single();
+
+        if (profileError && profileError.code === "PGRST116") {
+          // No row found → insert new profile
+          await supabase.from("profiles").insert({
+            id: data.user?.id,
+            email: data.user?.email,
+            avatar_url: data.user?.user_metadata?.avatar_url ?? null,
+          });
+        } else if (profileError) {
+          throw profileError; // other errors
+        }
+      }
+
+      console.log(data);
+
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/movo");
+      router.push("/home/now_playing");
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred");
     } finally {

@@ -7,6 +7,7 @@ import { LogoutButton } from "./logout-button";
 import { createClient } from "@/lib/supabase/client"; 
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { User } from "@supabase/supabase-js";
+import { ThemeSwitcher } from "./theme-switcher";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -16,9 +17,9 @@ interface SidebarItemProps {
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, url }) => (
   <Link href={url}>
-    <div className="flex items-center gap-4 p-2 hover:bg-zinc-900 rounded cursor-pointer">
+    <div className="flex items-center gap-4 p-2 hover:bg-zinc-900 hover:text-white rounded cursor-pointer">
       {icon}
-      <span className="text-sm font-medium text-white">{label}</span>
+      <span className={`text-sm font-medium`}>{label}</span>
     </div>
   </Link>
 );
@@ -92,7 +93,7 @@ export const Sidebar: React.FC<{
 
       {/* Sidebar */}
       <div
-        className={`${baseSidebarClasses} ${isMobile ? " bg-black z-40 h-full w-64 transform transition-transform duration-300 " : desktopWidth} ${
+        className={`${baseSidebarClasses} ${isMobile ? "bg-white dark:bg-zinc-950 z-40  w-64 transform transition-transform duration-300 " : desktopWidth} ${
           isMobile
             ? mobileOpen
               ? "translate-x-0"
@@ -105,6 +106,8 @@ export const Sidebar: React.FC<{
           <h1 className={`font-extrabold text-2xl ${collapsed && !isMobile ? "hidden" : ""}`}>
             Movino
           </h1>
+
+          {!collapsed&&<ThemeSwitcher/>}
           {!isMobile ? (
             <button
               onClick={() => setCollapsed(!collapsed)}

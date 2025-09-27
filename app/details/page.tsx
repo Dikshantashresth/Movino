@@ -9,6 +9,7 @@ import { Bookmark, Calendar, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Backbutton from "@/components/Backbutton";
 
 export interface Genre { name: string; id: number; }
 interface CastMember { character: string; name: string; id: number; profile_path?: string; }
@@ -53,11 +54,12 @@ export default function DetailsContent() {
   if (loading) return <SkeletonCard />;
   if (!movie) return <p>Movie not found</p>;
 
-  const imageUrl = movie?.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : "/placeholder.jpg";
+  const imageUrl = movie?.poster_path ? `https://image.tmdb.org/t/p/original${movie.poster_path}` : "/placeholder.jpg";
 
   return (
     <div className={`p-6 flex gap-6 ${isMobile ? "flex-col" : "flex-row"} h-full min-h-screen`}>
       {/* Poster */}
+      <Backbutton/>
       <div className={`${isMobile ? "w-full" : "w-1/3"} flex justify-center items-start`}>
         <div className="relative w-full max-w-[400px] aspect-[2/3] rounded-2xl overflow-hidden shadow-xl">
           <Image src={imageUrl} alt={movie?.title} fill priority className="object-cover" />
@@ -65,8 +67,8 @@ export default function DetailsContent() {
       </div>
       {/* Details */}
       <div className={`flex ${isMobile ? "w-full" : "w-2/3"} flex-col px-3 gap-4 rounded-xl p-5 text-white`}>
-        <h1 className="font-bold text-4xl">{movie?.title}</h1>
-        <div className="flex flex-row gap-4 text-gray-300">
+        <h1 className="font-bold text-4xl text-black dark:text-white">{movie?.title}</h1>
+        <div className="flex flex-row gap-4 text-gray-600 dark:text-gray-300">
           <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {movie?.release_date}</span>
           <span className="flex items-center gap-1"><Star className="w-4 h-4 text-yellow-400" /> {movie?.vote_average}</span>
         </div>

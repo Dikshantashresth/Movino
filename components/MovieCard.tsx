@@ -19,7 +19,7 @@ interface MovieCardProps {
 const MovieCard = ({item}:MovieCardProps) => {
   const [loading,setloading] = useState<boolean>(false)
       const imageUrl = item.poster_path
-    ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+    ? `https://image.tmdb.org/t/p/w1280${item.poster_path}`
     : "/placeholder.jpg"; // fallback image
    const  router = useRouter();
     const handleClick = () => {
