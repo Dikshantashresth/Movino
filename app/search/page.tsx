@@ -24,7 +24,6 @@ const Page = () => {
     const response = await getSearchedMovie(query);
     if (response) {
       setSearchedMovie(response.results);
-      console.log(response.results);
     }
   };
 

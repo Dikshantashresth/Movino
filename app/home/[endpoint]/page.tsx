@@ -40,7 +40,7 @@ const Show = () => {
       
         const data = await getMovies(endpoint);
         if (data) {
-          console.log("Fetched movies:", data);
+        
           setMovies(data.results);
         }
       } catch (err) {
