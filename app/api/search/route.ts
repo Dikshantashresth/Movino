@@ -1,4 +1,4 @@
-'use server'
+'use server';
 import { NextResponse } from "next/server";
 import axios from "axios";
 
@@ -18,8 +18,18 @@ export async function GET(req: Request) {
     );
 
     return NextResponse.json(response.data);
-  } catch (error: any) {
-    console.error("Error fetching movie:", error);
-    return NextResponse.json({ error: "Failed to fetch movies" }, { status: 500 });
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response?.data || error.message);
+    } else if (error instanceof Error) {
+      console.error("Generic error:", error.message);
+    } else {
+      console.error("Unknown error:", error);
+    }
+
+    return NextResponse.json(
+      { error: "Failed to fetch movies" },
+      { status: 500 }
+    );
   }
 }
