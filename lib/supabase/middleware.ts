@@ -30,7 +30,7 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
 
   // Protected routes (only logged-in users can access these)
-  const protectedRoutes = ["/mylist", "/saved", "/chatbot"];
+  const protectedRoutes = ["/settings", "/movo", "/chatbot"];
   const isProtected = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route),
   );
