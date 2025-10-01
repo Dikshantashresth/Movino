@@ -25,12 +25,12 @@ export interface MoviesResponse {
 }
 
 export const getMovies = async (endpoint: string): Promise<MoviesResponse> => {
- 
+  const  random = Math.floor(Math.random()*10)
     const token = process.env.TMDB_ACCESS_TOKEN; // server-side only
 
     const res = await axios.get(
       `https://api.themoviedb.org/3/movie/${endpoint}`,{params:{
-        page:1,
+        page:random,
         language:'en-us'
       },
       
