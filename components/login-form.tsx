@@ -38,7 +38,7 @@ export function LoginForm({
         password,
       });
       if (data) {
-        const { data: profile, error: profileError } = await supabase
+        const { error: profileError } = await supabase
           .from("profiles")
           .select("*")
           .eq("id", data.user?.id)
