@@ -21,12 +21,14 @@ const MovieCard = ({item}:MovieCardProps) => {
       const imageUrl = item.poster_path
     ? `https://image.tmdb.org/t/p/w1280${item.poster_path}`
     : "/placeholder.jpg"; // fallback image
-   const  router = useRouter();
+   const  router = useRouter(); 
+  
     const handleClick = () => {
     setloading(true)
     router.push(`/details?id=${item.id}`);
   };
   if(loading) return <SkeletonCard/>
+ 
   return (
    <Card className="rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
         <CardContent className="p-0">

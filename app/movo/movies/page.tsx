@@ -11,6 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Image from "next/image";
 
 interface MovieData {
   id: number;
@@ -58,7 +59,9 @@ export default function MovieCarousel() {
               <Card className="overflow-hidden rounded-2xl relative">
                 {/* Movie Image */}
                 {i.backdrop_path ? (
-                  <img
+                  <Image
+                  width={400}
+                  height={300}
                     src={`https://image.tmdb.org/t/p/original${i.backdrop_path}`}
                     alt={i.title}
                     className="w-full h-64 sm:h-80 lg:h-96 object-cover"

@@ -109,7 +109,7 @@ export const Sidebar: React.FC<{
 
           {!collapsed&&<ThemeSwitcher/>}
           {!isMobile ? (
-            <button
+              <button
               onClick={() => setCollapsed(!collapsed)}
               className="mb-6 self-end px-2 py-1 rounded transition bg-blue-600"
             >

@@ -3,9 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "@/components/MovieCard";
 import Backbutton from "@/components/Backbutton";
+import {useRouter, useSearchParams } from "next/navigation";
 
 interface Movie {
   id: number;
@@ -17,13 +18,16 @@ interface Movie {
 
 const Page = () => {
   const [query, setQuery] = useState<string>("");
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get('query') || '';
+  const router = useRouter();
   const [searchedMovie, setSearchedMovie] = useState<Movie[] | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const fetchMovies = async (q:string) => {
+  
 
     try {
-      const res = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const res = await fetch(`/api/search?query=${encodeURIComponent(q)}`);
       if (!res.ok) throw new Error("Failed to fetch");
       const data = await res.json();
       setSearchedMovie(data.results || []);
@@ -32,6 +36,17 @@ const Page = () => {
       setSearchedMovie([]);
     }
   };
+  const handleSubmit = (e: React.FormEvent)=>{
+    e.preventDefault();
+    router.push(`/search?query=${encodeURIComponent(query)}`);
+    fetchMovies(query);
+  }
+  useEffect(()=>{
+    if(initialQuery){
+      fetchMovies(initialQuery);
+      
+    }
+  },[initialQuery])
 
   return (
     <div className="h-screen flex flex-col">
