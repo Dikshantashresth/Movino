@@ -1,11 +1,22 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
-        domains: ["image.tmdb.org"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        port: "",
+        pathname: "/**",
       },
-
+      {
+        protocol: "https",
+        hostname: "uatasatarhauutwjrbmc.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
