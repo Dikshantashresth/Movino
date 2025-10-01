@@ -38,6 +38,7 @@ const MovieCard = ({item}:MovieCardProps) => {
             width={300}
             height={450}
             className="w-full h-[350px] object-cover"
+            priority
           />
         </CardContent>
         <CardFooter className="flex flex-col items-start p-4">
