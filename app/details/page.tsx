@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Backbutton from "@/components/Backbutton";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export interface Genre { name: string; id: number; }
 interface CastMember { character: string; name: string; id: number; profile_path?: string; }
@@ -23,6 +25,30 @@ export default function DetailsContent() {
   const [cast, setCast] = useState<CastMember[]>([]);
   const [loading, setLoading] = useState(true);
   const token = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
+  const supabase = createClient();
+
+ 
+  const saveMovies = async () => {
+    const user = await supabase.auth.getUser();
+    const {data:movieFetched} = await supabase.from('saved_movies').select().eq('movie_id',movie?.id).eq('user_id',user?.data.user?.id);
+
+    if(!movieFetched || movieFetched.length===0){
+    const { data } = await supabase.from('saved_movies').insert({
+      user_id: user?.data.user?.id,
+      movie_id: movie?.id,
+      title:movie?.title,
+      poster_path: `https://image.tmdb.org/t/p/original${movie?.poster_path}`,
+      overview:movie?.overview,
+      release_date:movie?.release_date,
+    });
+    if(data){
+      toast("saved")
+    }
+  }
+  else{
+    toast("already Saved",{description:"saved to mylist"})
+  }
+  }
 
   useEffect(() => {
     if (!id) return;
@@ -48,7 +74,8 @@ export default function DetailsContent() {
     };
 
     fetchMovie();
-  }, [id, token]);
+    console.log('render');
+  }, [id, token,toast]);
 
   if (!id) return <p>No movie selected</p>;
   if (loading) return <SkeletonCard />;
@@ -60,6 +87,7 @@ export default function DetailsContent() {
     <div className={`p-6 flex gap-6 ${isMobile ? "flex-col" : "flex-row"} h-full min-h-screen`}>
       {/* Poster */}
       <Backbutton/>
+
       <div className={`${isMobile ? "w-full" : "w-1/3"} flex justify-center items-start`}>
         <div className="relative w-full max-w-[400px] aspect-[2/3] rounded-2xl overflow-hidden shadow-xl">
           <Image src={imageUrl} alt={movie?.title} fill priority className="object-cover" />
@@ -90,8 +118,8 @@ export default function DetailsContent() {
           </div>
         </div>
         <div className="flex gap-3 mt-auto">
-          <Button className="flex-grow" variant="secondary"><Bookmark className="mr-2 h-4 w-4" />Save</Button>
-          <Button className="flex-grow">Test</Button>
+          <Button className="flex-grow" variant="secondary" onClick={saveMovies}><Bookmark className="mr-2 h-4 w-4" />Save</Button>
+   
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from "react";
 import { Sidebar } from "./SideBar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Toaster } from "sonner";
 export const AppLayout = ({ children }: { children: React.ReactNode }) => {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -26,6 +27,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
           !collapsed ? "ml-64" : "ml-20"
         }`}
       >
+        <Toaster richColors position="top-center"/>
         <Suspense>{children}</Suspense>
       </main>
     </div>

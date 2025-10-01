@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useState } from "react";
-import { Home, Search, Settings, Flame, BotIcon, Lock, Menu, X } from "lucide-react";
+import { Home, Search, Settings, Flame, BotIcon, Lock, Menu, X, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { LogoutButton } from "./logout-button";
@@ -72,6 +72,7 @@ export const Sidebar: React.FC<{
     { icon: <Search size={20} />, label: "Search", url: "/search" },
     { icon: <Flame size={20} />, label: "Popular", url: "/home/popular" },
     { icon: <BotIcon size={20} />, label: "Movo", url: "/movo" },
+    {icon: <Bookmark size={20}/>,label:"WatchList", url:'/mylist'},
     { icon: <Settings size={20} />, label: "Settings", url: "/settings" },
   ];
 
