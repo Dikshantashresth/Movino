@@ -63,7 +63,7 @@ IMPORTANT: **RETURN ONLY** a JSON array (e.g. ["Comedy","Romance"]). No explanat
 END
 `;
   const userQuery = `The User Input: ${query}`;
-  console.log(userQuery);
+
      try {
     const response = await axios.post(
       "https://openrouter.ai/api/v1/chat/completions",

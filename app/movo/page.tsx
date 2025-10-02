@@ -15,7 +15,7 @@ export default function Page() {
   const handleClick = async () => {
     setLoading(true);
     const data: string[] = await getMood(Mood);
-    console.log(data)
+
     setMood("");
     
     if (data) {

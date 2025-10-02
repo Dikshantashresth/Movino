@@ -31,28 +31,26 @@ const MyList = () => {
           .select("*")
           .eq("user_id", userId);
         if (data) {
-          console.log(data);
           setLoading(false);
           setMyList(data);
+          
         }
       }
     };
     getlist();
   }, [supabase]);
   const deleteMovie = async (id: number) => {
-    setLoading(true)
-    const { data, error } = await supabase
+    
+    const { error } = await supabase
       .from('saved_movies')
       .delete()
       .eq('id', id);
     // Optionally update state after deletion
-    if(data){
-      setLoading(false)
+    if (!error) { 
       toast("Deleted",{className:"bg-red-900"});
-    }
-    if (!error) {
       setMyList((prev) => prev.filter((movie) => movie.id !== id));
     }
+    setLoading(true);
   }
   if(myList.length===0) return <div>No Movies Added</div>
   if(loading) return <SkeletonCard/>

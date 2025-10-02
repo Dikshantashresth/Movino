@@ -13,9 +13,25 @@ import Backbutton from "@/components/Backbutton";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 
-export interface Genre { name: string; id: number; }
-interface CastMember { character: string; name: string; id: number; profile_path?: string; }
-export interface Movie { id: number; title: string; poster_path: string; release_date: string; vote_average: number; overview: string; genres?: Genre[]; }
+export interface Genre {
+  name: string;
+  id: number;
+}
+interface CastMember {
+  character: string;
+  name: string;
+  id: number;
+  profile_path?: string;
+}
+export interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  release_date: string;
+  vote_average: number;
+  overview: string;
+  genres?: Genre[];
+}
 
 export default function DetailsContent() {
   const searchParams = useSearchParams();
@@ -27,28 +43,28 @@ export default function DetailsContent() {
   const token = process.env.NEXT_PUBLIC_TMDB_ACCESS_TOKEN;
   const supabase = createClient();
 
- 
   const saveMovies = async () => {
     const user = await supabase.auth.getUser();
-    const {data:movieFetched} = await supabase.from('saved_movies').select().eq('movie_id',movie?.id).eq('user_id',user?.data.user?.id);
+    const { data: movieFetched } = await supabase
+      .from("saved_movies")
+      .select()
+      .eq("movie_id", movie?.id)
+      .eq("user_id", user?.data.user?.id);
 
-    if(!movieFetched || movieFetched.length===0){
-    const { data } = await supabase.from('saved_movies').insert({
-      user_id: user?.data.user?.id,
-      movie_id: movie?.id,
-      title:movie?.title,
-      poster_path: `https://image.tmdb.org/t/p/original${movie?.poster_path}`,
-      overview:movie?.overview,
-      release_date:movie?.release_date,
-    });
-    if(data){
-      toast("saved")
+    if (!movieFetched || movieFetched.length === 0) {
+      await supabase.from("saved_movies").insert({
+        user_id: user?.data.user?.id,
+        movie_id: movie?.id,
+        title: movie?.title,
+        poster_path: `https://image.tmdb.org/t/p/original${movie?.poster_path}`,
+        overview: movie?.overview,
+        release_date: movie?.release_date,
+      });
+      toast("saved");
+    } else {
+      toast("already Saved", { description: "saved to mylist" });
     }
-  }
-  else{
-    toast("already Saved",{description:"saved to mylist"})
-  }
-  }
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -57,10 +73,16 @@ export default function DetailsContent() {
       try {
         const [movieres, castres] = await Promise.all([
           axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
-            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }),
           axios.get(`https://api.themoviedb.org/3/movie/${id}/credits`, {
-            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }),
         ]);
 
@@ -74,35 +96,63 @@ export default function DetailsContent() {
     };
 
     fetchMovie();
-    console.log('render');
-  }, [id, token,toast]);
+    console.log("render");
+  }, [id, token, toast]);
 
   if (!id) return <p>No movie selected</p>;
   if (loading) return <SkeletonCard />;
   if (!movie) return <p>Movie not found</p>;
 
-  const imageUrl = movie?.poster_path ? `https://image.tmdb.org/t/p/original${movie.poster_path}` : "/placeholder.jpg";
+  const imageUrl = movie?.poster_path
+    ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
+    : "/placeholder.jpg";
 
   return (
-    <div className={`p-6 flex gap-6 ${isMobile ? "flex-col" : "flex-row"} h-full min-h-screen`}>
+    <div
+      className={`p-6 flex gap-6 ${
+        isMobile ? "flex-col" : "flex-row"
+      } h-full min-h-screen`}
+    >
       {/* Poster */}
-      <Backbutton/>
+      <Backbutton />
 
-      <div className={`${isMobile ? "w-full" : "w-1/3"} flex justify-center items-start`}>
+      <div
+        className={`${
+          isMobile ? "w-full" : "w-1/3"
+        } flex justify-center items-start`}
+      >
         <div className="relative w-full max-w-[400px] aspect-[2/3] rounded-2xl overflow-hidden shadow-xl">
-          <Image src={imageUrl} alt={movie?.title} fill priority className="object-cover" />
+          <Image
+            src={imageUrl}
+            alt={movie?.title}
+            fill
+            priority
+            className="object-cover"
+          />
         </div>
       </div>
       {/* Details */}
-      <div className={`flex ${isMobile ? "w-full" : "w-2/3"} flex-col px-3 gap-4 rounded-xl p-5 text-white`}>
-        <h1 className="font-bold text-4xl text-black dark:text-white">{movie?.title}</h1>
+      <div
+        className={`flex ${
+          isMobile ? "w-full" : "w-2/3"
+        } flex-col px-3 gap-4 rounded-xl p-5 text-white`}
+      >
+        <h1 className="font-bold text-4xl text-black dark:text-white">
+          {movie?.title}
+        </h1>
         <div className="flex flex-row gap-4 text-gray-600 dark:text-gray-300">
-          <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {movie?.release_date}</span>
-          <span className="flex items-center gap-1"><Star className="w-4 h-4 text-yellow-400" /> {movie?.vote_average}</span>
+          <span className="flex items-center gap-1">
+            <Calendar className="w-4 h-4" /> {movie?.release_date}
+          </span>
+          <span className="flex items-center gap-1">
+            <Star className="w-4 h-4 text-yellow-400" /> {movie?.vote_average}
+          </span>
         </div>
         <div className="flex flex-wrap gap-2">
           {movie?.genres?.map((g: Genre) => (
-            <Badge key={g.id} variant="outline" className="cursor-pointer">{g.name}</Badge>
+            <Badge key={g.id} variant="outline" className="cursor-pointer">
+              {g.name}
+            </Badge>
           ))}
         </div>
         <div className="bg-zinc-900 p-4 rounded-lg border">
@@ -113,13 +163,21 @@ export default function DetailsContent() {
           <span className="font-bold text-xl block mb-2">Cast</span>
           <div className="flex flex-wrap gap-2">
             {cast.slice(0, 10).map((actor) => (
-              <Badge key={actor.id} className="px-3 py-1 cursor-pointer">{actor.character} — {actor.name}</Badge>
+              <Badge key={actor.id} className="px-3 py-1 cursor-pointer">
+                {actor.character} — {actor.name}
+              </Badge>
             ))}
           </div>
         </div>
         <div className="flex gap-3 mt-auto">
-          <Button className="flex-grow" variant="secondary" onClick={saveMovies}><Bookmark className="mr-2 h-4 w-4" />Save</Button>
-   
+          <Button
+            className="flex-grow"
+            variant="secondary"
+            onClick={saveMovies}
+          >
+            <Bookmark className="mr-2 h-4 w-4" />
+            Save
+          </Button>
         </div>
       </div>
     </div>
